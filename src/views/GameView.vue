@@ -25,7 +25,7 @@
       <div v-for="i in sizeY" :key="`row-${i}`" class="row">
         <div v-for="j in sizeX" :key="`column-${j}`"
              class="square"
-             :class="{ 'square--blue': squares[i-1][j-1] }"
+             :class="{ 'square--blue': squares?.[i-1]?.[j-1] }"
              @mouseenter="toggleSquare(i-1, j-1)">
         </div>
       </div>
