@@ -5,22 +5,27 @@
         <v-text-field
           @change="generateSquares"
           label="Size X"
-          v-model="sizeX"
-          type="number"/>
+          single-line
+          type="number"
+          :min="0"
+          v-model.number="sizeX"/>
       </v-col>
       <v-col cols="6">
         <v-text-field
           @change="generateSquares"
           label="Size Y"
-          v-model="sizeY"/>
+          single-line
+          type="number"
+          :min="0"
+          v-model.number="sizeY"/>
       </v-col>
     </v-row>
 
-    <div>
+    <div class="game-board">
       <div v-for="i in sizeY" :key="`row-${i}`" class="row">
         <div v-for="j in sizeX" :key="`column-${j}`"
              class="square"
-             :class="{ 'square--blue': squares[i-1][j-1], 'square--white': !squares[i-1][j-1] }"
+             :class="{ 'square--blue': squares[i-1][j-1] }"
              @mouseenter="toggleSquare(i-1, j-1)">
         </div>
       </div>
@@ -31,17 +36,20 @@
 <script setup>
 import {ref} from 'vue';
 
-const sizeX = ref(100);
-const sizeY = ref(100);
+const sizeX = ref(0);
+const sizeY = ref(0);
 const squares = ref([]);
 
 function toggleSquare(x, y) {
   squares.value[x][y] = !squares.value[x][y];
 }
+
 function generateSquares() {
-  squares.value = [];
-  for (let i = 0; i < sizeY.value; i++) {
-    squares.value[i] = new Array(sizeX.value).fill(false);
+  if (sizeY.value > 0 && sizeX.value > 0) {
+    squares.value = [];
+    for (let i = 0; i < sizeY.value; i++) {
+      squares.value[i] = new Array(sizeX.value).fill(false);
+    }
   }
 }
 
@@ -51,7 +59,13 @@ generateSquares();
 <style>
 .row {
   display: flex;
+  width: fit-content;
   flex-wrap: nowrap;
+}
+
+.game-board {
+  width: auto;
+  overflow: scroll;
 }
 
 .square {
@@ -63,9 +77,5 @@ generateSquares();
 
 .square--blue {
   background-color: blue;
-}
-
-.square--white {
-  background-color: white;
 }
 </style>
